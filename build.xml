@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="package" name="owl2sql">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+	<property name="buildDir" value="bin"/>
+	<property name="libDir" value="lib"/>
+    <path id="owl2sql.classpath">
+        <pathelement path="${buildDir}"/>
+		<fileset dir="${libDir}">
+    		<include name="**/*.jar"/>
+    	</fileset>
+    </path>
+	
+    <target name="clean">
+        <delete dir="${buildDir}"/>
+    </target>
+	
+	<target name="init" depends="clean">
+		<mkdir dir="${buildDir}"/>
+	</target>
+	
+    <target name="compile" depends="init">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="owl2sql.classpath"/>
+        </javac>
+    </target>
+	
+	<target name="unzip-dependencies" depends="compile">
+		<unzip dest="${buildDir}">
+			<fileset dir="${libDir}"/>
+		</unzip>
+	</target>
+	
+    <target name="package" depends="unzip-dependencies" >
+        <jar destfile="${buildDir}/owl2sql.jar" basedir="${buildDir}">
+            <manifest>
+                <attribute name="Built-By" value="Brandon Thai"/>
+                <attribute name="Main-Class" value="edu/berkeley/icsi/metanet/owl2sql/Shell"/>
+            </manifest>
+        </jar>
+    </target>
+	
+	<target name="clean-dependencies" depends="unzip-dependencies">
+	</target>
+</project>

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar bin/owl2sql.jar "$@"
